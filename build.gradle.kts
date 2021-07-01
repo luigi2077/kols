@@ -13,6 +13,7 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-compiler")
+    implementation("org.eclipse.lsp4j:org.eclipse.lsp4j:0.11.0")
     testImplementation(kotlin("test"))
     testImplementation("org.assertj:assertj-core:3.20.2")
 }
