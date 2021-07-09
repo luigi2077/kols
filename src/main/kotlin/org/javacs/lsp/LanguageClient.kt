@@ -1,4 +1,4 @@
 package org.javacs.lsp
 
-class LanguageClient {
+interface LanguageClient {
 }

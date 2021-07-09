@@ -6,10 +6,10 @@ import org.javacs.lsp.params.InitializeParam
 import java.nio.file.Path
 
 class KotlinLanguageServer(
-    private val client: LanguageClient,
     private val compiler: KotlinCompiler,
 ) : LanguageServer {
     private lateinit var workspace: Path
+    lateinit var client: LanguageClient
     override fun initialize(param: InitializeParam) {
         TODO("Not yet implemented")
     }

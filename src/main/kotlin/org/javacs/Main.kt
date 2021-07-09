@@ -1,7 +1,15 @@
 package org.javacs
 
-import org.javacs.factory.LanguageServerFactory
+import org.javacs.lsp.impl.KotlinCompiler
+import org.javacs.lsp.impl.KotlinLanguageServer
+import kotlin.system.exitProcess
+
 
 fun main() {
-    val server = LanguageServerFactory.createKotlin()
+    try {
+        val launcher = Launcher()
+        launcher.run(KotlinLanguageServer(KotlinCompiler()), System.`in`, System.out)
+    } catch (e: Exception) {
+        exitProcess(-1)
+    }
 }

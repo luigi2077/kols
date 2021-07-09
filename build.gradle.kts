@@ -13,10 +13,10 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-compiler")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
     // gson
     implementation("com.google.code.gson:gson:2.8.7")
-    implementation("com.google.protobuf:protobuf:3.13.0")
+    implementation("com.google.protobuf:protobuf-java:3.17.3")
 
     testImplementation(kotlin("test"))
     testImplementation("org.assertj:assertj-core:3.20.2")
@@ -28,4 +28,11 @@ tasks.test {
 
 tasks.withType<KotlinCompile>() {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+tasks.withType<Jar>() {
+    manifest {
+        attributes("Main-Class" to "org.javacs.MainKt")
+    }
+    from(configurations.compileClasspath.get().map { if (it.isDirectory()) it else zipTree(it) })
 }
