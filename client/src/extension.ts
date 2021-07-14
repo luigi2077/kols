@@ -1,39 +1,38 @@
 import * as vscode from 'vscode';
 import * as path from "path";
 
-import { LanguageClient, LanguageClientOptions , ServerOptions, TransportKind} from 'vscode-languageclient/node';
+import { LanguageClient, LanguageClientOptions, ServerOptions } from 'vscode-languageclient/node';
+import { RevealOutputChannelOn } from 'vscode-languageclient';
 
 
 let client: LanguageClient;
 
 export function activate(context: vscode.ExtensionContext) {
   console.log("kotlin language server protocol activate")
-  let clientOptions : LanguageClientOptions = {
-    documentSelector: [{scheme: "file", language: 'kotlin'}],
+  let clientOptions: LanguageClientOptions = {
+    documentSelector: [{ scheme: "file", language: 'kotlin' }],
     synchronize: {
       configurationSection: "kotlin",
       fileEvents: [
-        vscode.workspace.createFileSystemWatcher("**/*.java"),
+        vscode.workspace.createFileSystemWatcher("**/*.kt"),
+        vscode.workspace.createFileSystemWatcher("**/*.kts"),
         vscode.workspace.createFileSystemWatcher("**/pom.xml")
       ]
     },
-    outputChannelName: "kotlin",
-    revealOutputChannelOn: 4
+    progressOnInitialization: true,
+    outputChannel: vscode.window.createOutputChannel("Kotlin"),
+    revealOutputChannelOn: RevealOutputChannelOn.Never,
   }
-  let serverModule = context.asAbsolutePath(
-		path.join('script', 'launch_in_mac.sh')
-	);
-  let debugOptions = { execArgv: ['--nolazy', '--inspect=6009'] };
   let serverOptions: ServerOptions = {
-    run: { module:serverModule ,transport: TransportKind.ipc },
-    debug: {
-			module: serverModule,
-			transport: TransportKind.ipc,
-			options: debugOptions
-		}
+    command: context.asAbsolutePath(path.join('script', 'launch_in_mac.sh')),
+    args: [],
+    options: {
+      cwd: vscode.workspace.workspaceFolders?.[0]?.uri?.fsPath,
+    }
   };
 
   let disposable = new LanguageClient("java", "Java Language Server", serverOptions, clientOptions).start();
+  console.log("server start....");
   context.subscriptions.push(disposable);
 }
 
