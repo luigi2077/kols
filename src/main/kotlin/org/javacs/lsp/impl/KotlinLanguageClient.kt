@@ -4,6 +4,7 @@ import org.javacs.lsp.LanguageClient
 import java.io.OutputStream
 
 class KotlinLanguageClient(
-    val send: OutputStream
+    private val send: OutputStream,
 ) : LanguageClient {
+    override fun read(): OutputStream = this.send
 }
